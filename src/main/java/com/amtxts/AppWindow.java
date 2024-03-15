@@ -18,7 +18,7 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 
 public class AppWindow {
-    private File outputFile, cmdsFile; // 默认为桌面路径
+    private File outputFile, cmdsFile; // 默认为程序所在路径
     private String[] commands;
     private final Image dukeIcon;
     private final JTextArea infoBar;
@@ -272,12 +272,14 @@ public class AppWindow {
                 trayIcon = new TrayIcon(dukeIcon, "监控机器人", popupMenu);
                 trayIcon.setImageAutoSize(true);
 
-                // 添加双击事件，实现从托盘还原窗口
-                trayIcon.addActionListener(new ActionListener() {
+                // 添加单击事件，实现从托盘还原窗口
+                trayIcon.addMouseListener(new MouseAdapter() {
                     @Override
-                    public void actionPerformed(ActionEvent e) {
-                        systemTray.remove(trayIcon);
-                        frame.setVisible(true);
+                    public void mouseClicked(MouseEvent e) {
+                        if (e.getButton() == MouseEvent.BUTTON1) { // 检查是否是鼠标左键单击
+                            systemTray.remove(trayIcon);
+                            frame.setVisible(true);
+                        }
                     }
                 });
 
